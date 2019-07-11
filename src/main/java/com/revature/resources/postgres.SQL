@@ -1,4 +1,4 @@
-drop table accounts, userlogins;
+drop table if exists accounts, userlogins;
 
 create table UserLogins(
     id serial primary key,
