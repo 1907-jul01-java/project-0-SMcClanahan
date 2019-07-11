@@ -28,7 +28,6 @@ class BasicUser implements Commands {
 
     @Override
     public int Balance(String user, String acctType) {
-        this.connection.prepareStatement(" select balance from accounts where userfk = ? ")
         return 0;
     }
 
