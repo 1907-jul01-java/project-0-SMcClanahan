@@ -1,15 +1,17 @@
-create or replace table Users(
+drop table accounts, userlogins;
+
+create table UserLogins(
     id serial primary key,
-    User varchar not null,
+    Username varchar not null,
     Pass varchar not null,
     FirstName varchar not null,
-    LastName varchar not null
-    AcctType integer 
+    LastName varchar not null,
+    AccessType integer
 );
 
-create or replace table Accounts(
+create table Accounts(
     id serial primary key,
-    user integer references Users(id),
+    Userfk integer references UserLogins(id),
     Balance float,
-    AccountType varchar
+    AcctType varchar
 );
