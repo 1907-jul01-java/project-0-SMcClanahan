@@ -6,28 +6,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 class BasicUser implements Commands {
-    private int UserID;
+    protected int UserID;
     Connection connection;
 
     public BasicUser() {
     }
 
-    public BasicUser(String Username, Connection connection) { //constructor to set up connection information
+    public BasicUser(Connection connection) {
         this.connection = connection;
-        
-        try (PreparedStatement pstatement = connection.prepareStatement(" select id from userlogins where username = ? ")) {
-           pstatement.setString(1, Username);
-           ResultSet resultSet = pstatement.executeQuery();
-           this.UserID = resultSet.getInt("id");
-           System.out.println(this.UserID);
+    }
+
+    public BasicUser(String Username, Connection connection) { // constructor to set up connection information
+        this.connection = connection;
+
+        try (PreparedStatement pstatement = connection
+                .prepareStatement(" select id from userlogins where username = ? ")) {
+            pstatement.setString(1, Username);
+            ResultSet resultSet = pstatement.executeQuery();
+            this.UserID = resultSet.getInt("id");
+            System.out.println(this.UserID);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    } //end constructor
 
     @Override
-    public double Balance(String user, String acctType) { //attempts to retrieve balance from sql database
-        try { //begin try block
+    public double Balance(String acctType) { // attempts to retrieve balance from sql database
+        try { // begin try block
             PreparedStatement pstatement = this.connection.prepareStatement( "select balance from accounts where userfk = ?" );
             pstatement.setInt(1, this.UserID);
             ResultSet resultSet =  pstatement.executeQuery();
@@ -41,7 +46,7 @@ class BasicUser implements Commands {
     } //end Balance
 
     @Override
-    public double Deposit(String user, String acctType, float amount) { //attempts to update sql database with new deposit information
+    public double Deposit(String acctType, float amount) { //attempts to update sql database with new deposit information
         PreparedStatement pstatement;
         try { //begin try block
             pstatement = this.connection.prepareStatement("select balance from accounts where userfk = ? and accttype = ?");
@@ -63,7 +68,7 @@ class BasicUser implements Commands {
     } //end Deposit
 
     @Override
-    public double Withdrawl(String user, String acctType, float amount) {
+    public double Withdrawl(String acctType, float amount) {
         PreparedStatement pstatement;
         try { //begin try block
             pstatement = this.connection.prepareStatement("select balance from accounts where userfk = ? and accttype = ?");
@@ -85,7 +90,7 @@ class BasicUser implements Commands {
     } //end Withdrawl
 
     @Override
-    public void Close(String user, String acctType) { //function for close of connection
+    public void Close() { //function for close of connection
         try { //begin try block
             this.connection.close(); //closes connection to database
         } catch (SQLException e) { //begin catch block

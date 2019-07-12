@@ -3,9 +3,9 @@ drop table if exists accounts, userlogins;
 create table UserLogins(
     id serial primary key,
     Username varchar not null,
-    Pass varchar not null,
-    FirstName varchar not null,
-    LastName varchar not null,
+    Pass varchar,
+    FirstName varchar,
+    LastName varchar,
     AccessType integer
 );
 
@@ -15,3 +15,6 @@ create table Accounts(
     Balance float,
     AcctType varchar
 );
+
+insert into userlogins (username) values ('sean');
+insert into Accounts (accttype, balance, userfk) values ('checking', 300, (SELECT id FROM userlogins where username = 'sean'));

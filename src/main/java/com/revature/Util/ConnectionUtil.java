@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-class ConnectionUtil {
+public class ConnectionUtil {
     private Connection connection;
     private String url;
     private String user;
