@@ -19,14 +19,18 @@ class BasicUser implements Commands {
     public BasicUser(String Username, Connection connection) { // constructor to set up connection information
         this.connection = connection;
 
-        try (PreparedStatement pstatement = connection
-                .prepareStatement(" select id from userlogins where username = ? ")) {
+        try (PreparedStatement pstatement = connection.prepareStatement(" select id from userlogins where username = ? ")) {
             pstatement.setString(1, Username);
             ResultSet resultSet = pstatement.executeQuery();
             this.UserID = resultSet.getInt("id");
             System.out.println(this.UserID);
+            System.out.println("Constructor Completed");
         } catch (SQLException e) {
             e.printStackTrace();
+            System.err.println("Constructor Failed");
+        } catch (NullPointerException e){
+            e.printStackTrace();
+            System.err.println("Constructor Failed");
         }
     } //end constructor
 
@@ -98,4 +102,8 @@ class BasicUser implements Commands {
             System.err.println("Connection refused to close"); //error message
         } //end try, catch block
     } //end Close
+
+    public int getUser(){
+        return this.UserID;
+    }
 } //end class BasicUser
