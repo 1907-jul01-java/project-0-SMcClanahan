@@ -16,5 +16,5 @@ create table Accounts(
     AcctType varchar
 );
 
-insert into userlogins (username) values ('sean');
+insert into userlogins (username, pass, firstname, lastname) values ('sean', 'luft', 'Sean', 'McClanahan');
 insert into Accounts (accttype, balance, userfk) values ('checking', 300, (SELECT id FROM userlogins where username = 'sean'));

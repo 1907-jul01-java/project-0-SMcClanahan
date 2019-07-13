@@ -16,23 +16,9 @@ class BasicUser implements Commands {
         this.connection = connection;
     }
 
-    public BasicUser(String Username, Connection connection) { // constructor to set up connection information
+    public BasicUser(int userID, Connection connection) { // constructor to set up connection information
         this.connection = connection;
-
-        try (PreparedStatement pstatement = connection.prepareStatement(" select id from userlogins where username = ? ")) {
-            pstatement.setString(1, Username);
-            ResultSet resultSet = pstatement.executeQuery();
-            resultSet.next();
-            this.UserID = resultSet.getInt("id");
-            System.out.println(this.UserID);
-            System.out.println("Constructor Completed");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("Constructor Failed");
-        } catch (NullPointerException e){
-            e.printStackTrace();
-            System.err.println("Constructor Failed");
-        }
+        this.UserID = userID;
     } //end constructor
 
     @Override

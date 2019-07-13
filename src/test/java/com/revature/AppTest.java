@@ -18,7 +18,7 @@ public class AppTest {
     ConnectionUtil connection;
     @Before public void TestInit(){
     connection = new ConnectionUtil();
-    this.user = new BasicUser("sean", connection.getConnection());
+    this.user = new BasicUser(1, connection.getConnection());
     }
 
     @Test
