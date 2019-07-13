@@ -1,8 +1,11 @@
 package com.revature;
 
 import com.revature.Util.*;
+import com.revature.resources.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,14 +15,22 @@ import org.junit.Test;
  */
 public class AppTest {
     BasicUser user;
-    @Test public void TestInit(){
-    ConnectionUtil connection = new ConnectionUtil();
+    ConnectionUtil connection;
+    @Before public void TestInit(){
+    connection = new ConnectionUtil();
     this.user = new BasicUser("sean", connection.getConnection());
     }
 
     @Test
+    public void TestUser(){
+        assertNotNull(user);
+        assertNotNull(connection);
+        assertEquals(1, user.getUser(), 0);
+    }
+
+    @Test
     public void TestBalance(){
-        assertEquals(300, user.Balance("checking"));
+        assertEquals(300, user.Balance("checking"),0);
 
     }
     

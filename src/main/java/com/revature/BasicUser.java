@@ -22,6 +22,7 @@ class BasicUser implements Commands {
         try (PreparedStatement pstatement = connection.prepareStatement(" select id from userlogins where username = ? ")) {
             pstatement.setString(1, Username);
             ResultSet resultSet = pstatement.executeQuery();
+            resultSet.next();
             this.UserID = resultSet.getInt("id");
             System.out.println(this.UserID);
             System.out.println("Constructor Completed");
@@ -40,6 +41,7 @@ class BasicUser implements Commands {
             PreparedStatement pstatement = this.connection.prepareStatement( "select balance from accounts where userfk = ?" );
             pstatement.setInt(1, this.UserID);
             ResultSet resultSet =  pstatement.executeQuery();
+            resultSet.next();
             return resultSet.getDouble("balance"); //returns current balance on acct from sql database
 
         } catch (Exception e) { //begin catch block
@@ -57,6 +59,7 @@ class BasicUser implements Commands {
             pstatement.setInt(1, this.UserID);
             pstatement.setString(2, acctType);
             ResultSet resultSet = pstatement.executeQuery();
+            resultSet.next();
             double currentBalance = resultSet.getDouble("balance"); //gets current balance from sql database
             pstatement = this.connection.prepareStatement("update accounts set balance = ? where userfk = ? ");
             pstatement.setDouble(1, currentBalance + amount);
@@ -79,6 +82,7 @@ class BasicUser implements Commands {
             pstatement.setInt(1, this.UserID);
             pstatement.setString(2, acctType);
             ResultSet resultSet = pstatement.executeQuery();
+            resultSet.next();
             double currentBalance = resultSet.getDouble("balance"); //gets current balance from sql database
             pstatement = this.connection.prepareStatement("update accounts set balance = ? where userfk = ? ");
             pstatement.setDouble(1, currentBalance + amount);
