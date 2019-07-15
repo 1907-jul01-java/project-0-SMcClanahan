@@ -34,7 +34,7 @@ public class App {
                         "2. Apply for a new account\n" +
                         "3. Make a Deposit\n" +
                         "4. Make a Withdrawl\n" +
-                        "5. Make a transfer between accounts");
+                        "5. Make a transfer between accounts\n");
                         switch(input.nextLine()){
                             case "1" :{
                                 User.Balance();

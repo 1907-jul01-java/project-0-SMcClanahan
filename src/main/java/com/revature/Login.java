@@ -18,15 +18,14 @@ public class Login {
 
     public int ask() {
         String response;
-        System.out.println("Do you have an acccout?");
+        System.out.println("Do you have an acccout? (y,n) \n");
         response = input.nextLine();
-        System.out.println(response);
         if (response.equals("y") || response.equals("yes")) {
             return this.Match();
         } else if (response.equals("n") || response.equals("no")) {
             return 0;
         } else {
-            System.out.println("invalid response");
+            System.out.println("invalid response\n");
             this.ask();
         }
         System.err.println("Error, Login failed");
@@ -34,24 +33,24 @@ public class Login {
     }
 
     private int Match() {
-        System.out.println("Please enter a username");
+        System.out.println("Please enter username\n");
         String response = input.nextLine();
         try (PreparedStatement pstatement = connection
                 .prepareStatement("select * from userlogins where username = ?")) {
             pstatement.setString(1, response);
             ResultSet resultSet = pstatement.executeQuery();
             if (resultSet.next()) {
-                System.out.println("Please enter password");
+                System.out.println("Please enter password\n");
                 response = input.nextLine();
                 if (response.equals(resultSet.getString("pass"))) {
-                    System.out.println("Welcome\t" + resultSet.getString("firstname") + " " + resultSet.getString("lastname"));
+                    System.out.println("Welcome\t" + resultSet.getString("firstname") + " " + resultSet.getString("lastname") + "\n");
                     return resultSet.getInt("id");
                 } else {
-                    System.out.println("invalid password");
+                    System.out.println("invalid password\n");
                     this.ask();
                 }
             } else {
-                System.out.println("Username not found");
+                System.out.println("Username not found\n");
                 this.ask();
             }
 
@@ -67,7 +66,7 @@ public class Login {
         String username, pass, firstname, lastname;
 
         do {
-            System.out.println("Please create a username");
+            System.out.println("Please create a username\n");
             username = input.nextLine();
             if (username.equals("exit")) {
                 break;
@@ -92,15 +91,15 @@ public class Login {
         }
 
         do {
-            System.out.println("Please create a password");
+            System.out.println("Please create a password\n");
             pass = input.nextLine();
             if (pass.equals("exit")) {
                 return -1;
             }
         } while (pass.equals(null) || pass.equals(""));
-        System.out.println("Please enter Firstname");
+        System.out.println("Please enter Firstname\n");
         firstname = input.nextLine();
-        System.out.println("Please enter Lastname");
+        System.out.println("Please enter Lastname\n");
         lastname = input.nextLine();
 
         try (PreparedStatement pstatement = connection.prepareStatement(

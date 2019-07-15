@@ -28,17 +28,18 @@ class BasicUser implements Commands {
     public double Balance() { // attempts to retrieve balance from sql database
         try { // begin try block
             PreparedStatement pstatement = this.connection
-                    .prepareStatement("select accttype, balance from accounts where userfk = ?");
+                    .prepareStatement("select id, accttype, balance from accounts where userfk = ? group by id");
             pstatement.setInt(1, this.UserID);
             ResultSet resultSet = pstatement.executeQuery();
             while (resultSet.next()) {
-                System.out.println(resultSet.getString("accttype") + " " + resultSet.getDouble("balance")); // outputs
-                                                                                                            // current
-                                                                                                            // balance
-                                                                                                            // on acct
-                                                                                                            // from sql
-                                                                                                            // database
-            }
+                System.out.println(resultSet.getInt("id") + ". " + resultSet.getString("accttype") + " "
+                        + resultSet.getDouble("balance")); // outputs
+                // current
+                // balance
+                // on acct
+                // from sql
+                // database
+            } System.out.println();
             return 0;
 
         } catch (Exception e) { // begin catch block
@@ -50,9 +51,9 @@ class BasicUser implements Commands {
 
     @Override
     public double Deposit(int acctType) { // attempts to update sql database with new deposit
-        System.out.println("Please enter amount to be deposited");
-        double amount = input.nextDouble();                          
-        
+        System.out.println("Please enter amount to be deposited\n");
+        double amount = input.nextDouble();
+
         PreparedStatement pstatement;
         try { // begin try block
             pstatement = this.connection.prepareStatement("select balance from accounts where userfk = ? and id = ?");
@@ -61,7 +62,8 @@ class BasicUser implements Commands {
             ResultSet resultSet = pstatement.executeQuery();
             resultSet.next();
             double currentBalance = resultSet.getDouble("balance"); // gets current balance from sql database
-            pstatement = this.connection.prepareStatement("update accounts set balance = ? where userfk = ? and id = ?");
+            pstatement = this.connection
+                    .prepareStatement("update accounts set balance = ? where userfk = ? and id = ?");
             pstatement.setDouble(1, currentBalance + amount);
             pstatement.setInt(2, this.UserID);
             pstatement.setInt(3, acctType);
@@ -77,8 +79,11 @@ class BasicUser implements Commands {
 
     @Override
     public double Withdrawl(int acctType) {
-        System.out.println("Please enter amount to be withdrawled");
+        System.out.println("Please enter amount to be withdrawled\n");
         double amount = input.nextDouble();
+        if (amount > getBalance(acctType)) {
+            System.out.println("Cannot complete withdrawl\n" + "Account would be overdrawn\n");
+        }
 
         PreparedStatement pstatement;
         try { // begin try block
@@ -88,7 +93,8 @@ class BasicUser implements Commands {
             ResultSet resultSet = pstatement.executeQuery();
             resultSet.next();
             double currentBalance = resultSet.getDouble("balance"); // gets current balance from sql database
-            pstatement = this.connection.prepareStatement("update accounts set balance = ? where userfk = ? and id = ?");
+            pstatement = this.connection
+                    .prepareStatement("update accounts set balance = ? where userfk = ? and id = ?");
             pstatement.setDouble(1, currentBalance - amount);
             pstatement.setInt(2, this.UserID);
             pstatement.setInt(3, acctType);
@@ -120,18 +126,18 @@ class BasicUser implements Commands {
     public int GetAccounts() { // begin GetAccounts
         try { // begin try block
             PreparedStatement pStatement = this.connection
-                    .prepareStatement("select accttype, id from accounts where userfk = ?");
+                    .prepareStatement("select accttype, id from accounts where userfk = ? group by id");
             pStatement.setInt(1, this.UserID);
             ResultSet resultSet = pStatement.executeQuery();
-            System.out.println("Please select account");
+            System.out.println("Please select account\n");
             if (!resultSet.next()) {
-                System.out.println("No accounts found");
+                System.out.println("No accounts found\n");
             }
             do {
                 System.out.println((resultSet.getInt("id")) + " " + resultSet.getString("accttype"));
             } while (resultSet.next());
-                int response = this.input.nextInt();
-                return response;
+            int response = this.input.nextInt();
+            return response;
         } catch (SQLException e) { // begin catch block
             e.printStackTrace();
         } // end try/catch
@@ -140,19 +146,19 @@ class BasicUser implements Commands {
 
     @Override
     public void Apply() {
-        System.out.println("Please specify what type of account you would like to open");
+        System.out.println("Please specify what type of account you would like to open\n");
         String accttype = input.nextLine();
 
-            try (PreparedStatement pStatement = connection
-                    .prepareStatement("insert into applications (id, accttype) values (?,?)")) {
-                pStatement.setInt(1, UserID);
-                pStatement.setString(2, accttype);
-                pStatement.executeUpdate();
-                System.out.println("Your application has been submitted");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } // end try/catch
-    } //end Apply
+        try (PreparedStatement pStatement = connection
+                .prepareStatement("insert into applications (id, accttype) values (?,?)")) {
+            pStatement.setInt(1, UserID);
+            pStatement.setString(2, accttype);
+            pStatement.executeUpdate();
+            System.out.println("Your application has been submitted\n");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } // end try/catch
+    } // end Apply
 
     @Override
     public void Transfer() {
@@ -162,16 +168,45 @@ class BasicUser implements Commands {
 
         System.out.println("Transfer to:");
         int to = this.GetAccounts();
-        
-        if (to == from){
-            System.out.println("You cannot trasfer to and from the same account");
+
+        if (to == from) {
+            System.out.println("You cannot trasfer to and from the same account\n");
+            this.Transfer();
         }
 
-        System.out.println("How much would you like to transfer?");
-            double amount = input.nextDouble();
+        System.out.println("How much would you like to transfer?\n");
+        double amount = input.nextDouble();
+        if (amount > this.getBalance(from)) {
+            System.out.println("Cannot complete transfer \n account would be overdrawn\n");
+            this.Transfer();
+        }
 
-        //TODO enter premade command to update values in database
+        try {
+            PreparedStatement pStatement = connection.prepareStatement("update accounts set balance = ? where id = ?");
+            pStatement.setDouble(1, this.getBalance(to) + amount);
+            pStatement.setInt(2, to);
+            pStatement.executeUpdate();
+            pStatement.setDouble(1, this.getBalance(from) - amount);
+            pStatement.setInt(2, from);
+            pStatement.executeUpdate();
+
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        // TODO enter premade command to update values in database
+    } // end Transfer
+
+    public double getBalance(int accttype) {
+        try (PreparedStatement pStatement = connection.prepareStatement("select balance from accounts where id = ?")) {
+            pStatement.setInt(1, accttype);
+            ResultSet resultSet = pStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getDouble("balance");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
-    
-} //end class BasicUser
+} // end class BasicUser
