@@ -1,4 +1,4 @@
-drop table if exists accounts, userlogins;
+drop table if exists accounts, userlogins, applications;
 
 create table UserLogins(
     id serial primary key,
@@ -16,5 +16,11 @@ create table Accounts(
     AcctType varchar
 );
 
+create table Applications(
+    id integer references UserLogins(id),
+    AcctType varchar
+);
+
 insert into userlogins (username, pass, firstname, lastname) values ('sean', 'luft', 'Sean', 'McClanahan');
 insert into Accounts (accttype, balance, userfk) values ('checking', 300, (SELECT id FROM userlogins where username = 'sean'));
+insert into Accounts (accttype, balance, userfk) values ('savings', 300, (SELECT id FROM userlogins where username = 'sean'));

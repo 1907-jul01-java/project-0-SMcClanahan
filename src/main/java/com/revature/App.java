@@ -17,14 +17,15 @@ public class App {
         if (user >= 0){
             if (user == 0){
                 user = login.Create(0);
-                System.out.println(user);
             }
             int userType = login.getType();
             if (userType == 1){
-            EmployeeUser y = new EmployeeUser(connection.getConnection());}
+            EmployeeUser y = new EmployeeUser(connection.getConnection());
+            //TODO enter employee logic
+            }
             else {
-                BasicUser User = new BasicUser(user, connection.getConnection());
-                while(!input.nextLine().equals("exit")){
+                BasicUser User = new BasicUser(input, user, connection.getConnection());
+                while(!input.nextLine().equals("exit")){ //TODO fix while 
                     if(user == -1){
                         break;
                     } //end if
@@ -37,27 +38,30 @@ public class App {
                         switch(input.nextLine()){
                             case "1" :{
                                 User.Balance();
+                                break;
                             } //end case 1
                             case "2":{
-                                //TODO application logic
+                                User.Apply();
+                                break;
                             } //end case 2
                             case "3":{
-                                System.out.println("Please enter amount to be deposited");
-                                double deposit = input.nextDouble();
-                                User.Deposit(User.GetAccounts(), deposit);
+                                User.Balance();
+                                User.Deposit(User.GetAccounts());
+                                break;
                             } //end case 3
                             case "4":{
-                                System.out.println("Please enter amount to be withdrawled");
-                                double withdrawl = input.nextDouble();
-                                User.Withdrawl(User.GetAccounts(), withdrawl);
+                                User.Balance();
+                                User.Withdrawl(User.GetAccounts());
+                                break;
                             } //end case 4
                             case "5":{
-                                //TODO create transfer function
+                                User.Transfer();
+                                break;
                             } //end case 5
                         } //end switch
                 } //end while
             } //end else
-            //TODO enter employee logic
+            
             //TODO enter admin logic
         } //end error handling if 
         else{
