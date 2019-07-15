@@ -9,13 +9,14 @@ import java.util.Scanner;
 class BasicUser implements Commands {
     protected int UserID;
     Connection connection;
-    private Scanner input;
+    protected Scanner input;
 
     public BasicUser() {
     }
 
-    public BasicUser(Connection connection) {
+    public BasicUser(Scanner input, Connection connection) {
         this.connection = connection;
+        this.input = input;
     }
 
     public BasicUser(Scanner input, int userID, Connection connection) { // constructor to set up connection information

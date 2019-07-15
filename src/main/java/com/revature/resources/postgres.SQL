@@ -6,7 +6,7 @@ create table UserLogins(
     Pass varchar,
     FirstName varchar,
     LastName varchar,
-    AccessType integer
+    AccessType integer default 0
 );
 
 create table Accounts(
@@ -24,3 +24,4 @@ create table Applications(
 insert into userlogins (username, pass, firstname, lastname) values ('sean', 'luft', 'Sean', 'McClanahan');
 insert into Accounts (accttype, balance, userfk) values ('checking', 300, (SELECT id FROM userlogins where username = 'sean'));
 insert into Accounts (accttype, balance, userfk) values ('savings', 300, (SELECT id FROM userlogins where username = 'sean'));
+insert into userlogins (username, pass, accesstype) values ('luft', 'luft', 1);

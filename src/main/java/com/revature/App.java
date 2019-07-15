@@ -18,11 +18,52 @@ public class App {
             if (user == 0){
                 user = login.Create(0);
             }
-            int userType = login.getType();
-            if (userType == 1){
-            EmployeeUser y = new EmployeeUser(connection.getConnection());
-            //TODO enter employee logic
-            }
+            if (user == 1){
+                EmployeeUser y = new EmployeeUser(input, connection.getConnection());
+                while(true){
+                    System.out.println("What would you like to do?\n" +
+                    "1. View Accounts\n" +
+                    "2. Approve/Deny account applications\n" +
+                    "3. Change funds in user account\n");
+
+                    switch(input.nextLine()){
+                        case "1":{
+                            y.getAccountsTable();
+                            break;
+                        } //end case 1
+                        case "2":{
+                            System.out.println("not done yet");
+                            break;
+                        } //end case 2
+                        case "3":{
+                            y.getAccountsTable();
+                            y.setUser();
+                            System.out.println("What would you like to do?\n" +
+                            "1. Deposit into account\n" +
+                            "2. Withdrawl from account\n" +
+                            "3. Transfer between accounts\n");
+                            switch(input.nextInt()){
+                                case 1:{
+                                    y.Balance();
+                                    y.Deposit(y.GetAccounts());
+                                    break;
+                                } //end case 1
+                                case 2:{
+                                    y.Balance();
+                                    y.Withdrawl(y.GetAccounts());
+                                    break;
+                                } //end case 2
+                                case 3:{
+                                    y.Balance();
+                                    y.Deposit(y.GetAccounts());
+                                    break;
+                                } //end case 3
+                            } //end switch
+                            break;
+                        } //end case 3
+                    } //end switch
+                } //end while
+            } //end if
             else {
                 BasicUser User = new BasicUser(input, user, connection.getConnection());
                 while(!input.nextLine().equals("exit")){ //TODO fix while 

@@ -44,7 +44,7 @@ public class Login {
                 response = input.nextLine();
                 if (response.equals(resultSet.getString("pass"))) {
                     System.out.println("Welcome\t" + resultSet.getString("firstname") + " " + resultSet.getString("lastname") + "\n");
-                    return resultSet.getInt("id");
+                    return resultSet.getInt("accesstype");
                 } else {
                     System.out.println("invalid password\n");
                     this.ask();
@@ -120,9 +120,5 @@ public class Login {
         }
 
         return -1;
-    }
-
-    public int getType() {
-        return type;
     }
 }
