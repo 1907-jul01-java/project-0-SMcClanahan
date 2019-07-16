@@ -54,6 +54,10 @@ class BasicUser implements Commands {
     public double Deposit(int acctType) { // attempts to update sql database with new deposit
         System.out.println("Please enter amount to be deposited\n");
         double amount = input.nextDouble();
+        if(amount <= 0){
+            System.out.println("Please enter only positive numbers");
+            return -1;
+        }
 
         PreparedStatement pstatement;
         try { // begin try block
@@ -64,7 +68,7 @@ class BasicUser implements Commands {
             resultSet.next();
             double currentBalance = resultSet.getDouble("balance"); // gets current balance from sql database
             pstatement = this.connection
-                    .prepareStatement("update accounts set balance = ? where userfk = ? and id = ?");
+                    .prepareStatement("update accounts set balance = ? where userfk = ? and id = ?"); //TODO fix this
             pstatement.setDouble(1, currentBalance + amount);
             pstatement.setInt(2, this.UserID);
             pstatement.setInt(3, acctType);
@@ -79,11 +83,15 @@ class BasicUser implements Commands {
     } // end Deposit
 
     @Override
-    public double Withdrawl(int acctType) {
+    public  double Withdrawl(int acctType) {
         System.out.println("Please enter amount to be withdrawled\n");
         double amount = input.nextDouble();
         if (amount > getBalance(acctType)) {
             System.out.println("Cannot complete withdrawl\n" + "Account would be overdrawn\n");
+        }
+        else if(amount <= 0){
+            System.out.println("Please enter only positive numbers");
+            return -1;
         }
 
         PreparedStatement pstatement;

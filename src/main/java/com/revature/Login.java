@@ -47,18 +47,17 @@ public class Login {
                     return resultSet.getInt("accesstype");
                 } else {
                     System.out.println("invalid password\n");
-                    this.ask();
+                    return this.ask();
                 }
             } else {
                 System.out.println("Username not found\n");
-                this.ask();
+                return this.ask();
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return -1;
-
     }
 
     public int Create(int Type) {

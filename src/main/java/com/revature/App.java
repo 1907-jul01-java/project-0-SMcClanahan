@@ -4,10 +4,7 @@ import java.util.Scanner;
 
 import com.revature.Util.ConnectionUtil;
 
-/**
- * Hello world!
- *
- */
+
 public class App {
     public static void main(String[] args) {
         ConnectionUtil connection = new ConnectionUtil();
@@ -24,11 +21,17 @@ public class App {
                     System.out.println("What would you like to do?\n" +
                     "1. View Accounts\n" +
                     "2. Approve/Deny account applications\n" +
-                    "3. Change funds in user account\n");
+                    "3. Change funds in user account\n" +
+                    "Or type \"exit\"");
 
-                    switch(input.nextLine()){
+                    String in = input.nextLine();
+                    if(in.equalsIgnoreCase("exit")){
+                        break;
+                    }
+                    switch(in){
                         case "1":{
-                            y.getAccountsTable();
+                            y.updateTable();
+                            y.toString();
                             break;
                         } //end case 1
                         case "2":{
@@ -36,7 +39,6 @@ public class App {
                             break;
                         } //end case 2
                         case "3":{
-                            y.getAccountsTable();
                             y.setUser();
                             System.out.println("What would you like to do?\n" +
                             "1. Deposit into account\n" +
@@ -66,17 +68,22 @@ public class App {
             } //end if
             else {
                 BasicUser User = new BasicUser(input, user, connection.getConnection());
-                while(!input.nextLine().equals("exit")){ //TODO fix while 
-                    if(user == -1){
-                        break;
-                    } //end if
+                while(true){  
                         System.out.println("What would you like to do?\n" +
                         "1. View my account balance\n" +
                         "2. Apply for a new account\n" +
-                        "3. Make a Deposit\n" +
-                        "4. Make a Withdrawl\n" +
-                        "5. Make a transfer between accounts\n");
-                        switch(input.nextLine()){
+                        "3. Be added to a joint account\n" +
+                        "4. Make a Deposit\n" +
+                        "5. Make a Withdrawl\n" +
+                        "6. Make a transfer between accounts\n" +
+                        "Or type \"exit\"");
+
+                        String in = input.nextLine();
+                        if (in.equalsIgnoreCase("exit")){
+                            break;
+                        }
+
+                        switch(in){
                             case "1" :{
                                 User.Balance();
                                 break;
@@ -86,16 +93,20 @@ public class App {
                                 break;
                             } //end case 2
                             case "3":{
+                                //TODO Enter joint acct logic
+                                break;
+                            }
+                            case "4":{
                                 User.Balance();
                                 User.Deposit(User.GetAccounts());
                                 break;
                             } //end case 3
-                            case "4":{
+                            case "5":{
                                 User.Balance();
                                 User.Withdrawl(User.GetAccounts());
                                 break;
                             } //end case 4
-                            case "5":{
+                            case "6":{
                                 User.Transfer();
                                 break;
                             } //end case 5

@@ -22,14 +22,12 @@ public class ConnectionUtil {
             this.url = properties.getProperty("url");
             this.user = properties.getProperty("user");
             this.password = properties.getProperty("password");
-            System.out.println(this.url);
-            System.out.println(this.password);
-            System.out.println(this.user);
-            try{
-                System.out.println("i got here");
+            //System.out.println(this.url);
+            //System.out.println(this.password);
+            //System.out.println(this.user);
+            try{        
                 DriverManager.getDriver(this.url);
                 this.connection = DriverManager.getConnection(this.url, this.user, this.password);
-                System.out.println("i got here too");
             } catch(NullPointerException e){
                 e.getMessage();
             }
