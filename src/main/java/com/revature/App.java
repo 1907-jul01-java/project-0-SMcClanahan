@@ -15,9 +15,10 @@ public class App {
         if (user >= 0){
             if (user == 0){
                 user = login.Create(0);
+                System.out.println("Thank you for creating an account! Please log in:\n");
+                user = login.Match();
             }
-            System.out.println("Thank you for creating an account! Please log in:\n");
-            user = login.Match();
+            
             if (login.getPermissions() >= 1){ 
                 EmployeeUser y = new EmployeeUser(input, connection.getConnection());
                 while(true){
@@ -96,7 +97,7 @@ public class App {
                         "6. Make a transfer between accounts\n" +
                         "Or type \"exit\" \n");
 
-                        String in = input.nextLine();
+                        String in = input.next();
 
 
                         if (in.equalsIgnoreCase("exit")){
@@ -122,12 +123,10 @@ public class App {
                                 break;
                             }
                             case "4":{
-                                User.Balance();
                                 User.Deposit(User.GetAccounts());
                                 break;
                             } //end case 3
                             case "5":{
-                                User.Balance();
                                 User.Withdrawl(User.GetAccounts());
                                 break;
                             } //end case 4
