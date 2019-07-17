@@ -42,11 +42,11 @@ A Mavenized Java 8 CLI program connected to a PostgreSQL database. Submit a READ
     - [x] Account information
     - [x] Account balances
     - [x] Personal information
-- [] Employees should be able to approve/deny open applications for accounts.
+- [x] Employees should be able to approve/deny open applications for accounts.
 - [] Bank admins should be able to view and edit all accounts. This includes:
-    - [] Approving/denying accounts
-    - [] Withdrawing, depositing, transferring from all accounts
-    - [] Canceling accounts
+    - [x] Approving/denying accounts
+    - [x] Withdrawing, depositing, transferring from all accounts
+    - [x] Canceling accounts
 - [x] All information should be persisted using text files and serialization.
 - [] 100% test coverage is expected using JUnit. You should be using TDD.
 - [] Logging should be accomplished using Log4J. All transactions should be logged.

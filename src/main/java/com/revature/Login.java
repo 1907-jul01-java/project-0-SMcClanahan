@@ -32,6 +32,10 @@ public class Login {
         return -1;
     }
 
+    public int getPermissions(){
+        return this.type;
+    }
+
     private int Match() {
         System.out.println("Please enter username\n");
         String response = input.nextLine();
@@ -44,7 +48,8 @@ public class Login {
                 response = input.nextLine();
                 if (response.equals(resultSet.getString("pass"))) {
                     System.out.println("Welcome\t" + resultSet.getString("firstname") + " " + resultSet.getString("lastname") + "\n");
-                    return resultSet.getInt("accesstype");
+                    this.type = resultSet.getInt("accesstype");
+                    return resultSet.getInt("id");
                 } else {
                     System.out.println("invalid password\n");
                     return this.ask();
