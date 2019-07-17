@@ -1,5 +1,6 @@
 package com.revature;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.revature.Util.ConnectionUtil;
@@ -49,20 +50,17 @@ public class App {
                             "1. Deposit into account\n" +
                             "2. Withdrawl from account\n" +
                             "3. Transfer between accounts\n");
-                            switch(input.nextInt()){
-                                case 1:{
-                                    y.Deposit(y.GetAccounts());
-                                    y.Balance();
+                            switch(input.next()){
+                                case "1":{
+                                    y.Deposit(y.getUser());
                                     break;
                                 } //end case 1
-                                case 2:{
-                                    y.Withdrawl(y.GetAccounts());
-                                    y.Balance();
+                                case "2":{
+                                    y.Withdrawl(y.getUser());
                                     break;
                                 } //end case 2
-                                case 3:{
-                                    y.Balance();
-                                    y.Deposit(y.GetAccounts());
+                                case "3":{
+                                    y.Transfer();
                                     break;
                                 } //end case 3  
                                 default:
@@ -73,7 +71,7 @@ public class App {
                         case "4":{
                             if(login.getPermissions() != 2){
                                 System.err.println("You do not have permission for those commands\n");
-                                break;
+                                break; //TODO deletion logic
                             }
                             else {
 
@@ -111,6 +109,12 @@ public class App {
                                 break;
                             } //end case 2
                             case "3":{
+                                System.out.println("Please enter the account number you would like to be added to:\n");
+                                try{
+                                    User.Apply(input.nextInt());
+                                }catch (InputMismatchException e){
+                                    System.err.println("Invalid Input, a number is required");
+                                }
                                 //TODO Enter joint acct logic
                                 break;
                             }

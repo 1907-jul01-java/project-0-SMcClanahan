@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 class BasicUser implements Commands {
@@ -50,8 +51,11 @@ class BasicUser implements Commands {
 
     @Override
     public double Deposit(int acctType) { // attempts to update sql database with new deposit
+        
+        try{
         System.out.println("Please enter amount to be deposited\n");
         double amount = input.nextDouble();
+        System.out.println(amount);
         if (amount <= 0) {
             System.out.println("Please enter only positive numbers\n");
             return -1;
@@ -74,11 +78,16 @@ class BasicUser implements Commands {
             e.printStackTrace();
         } // end try, catch block
         System.err.println("Deposit Failed"); // error message
-        return -1; // error return key
+    } catch (InputMismatchException e){
+        System.err.println("Invalid Input");
+    }
+    return -1; // error return key
     } // end Deposit
 
     @Override
     public double Withdrawl(int acctType) {
+       
+        try{
         System.out.println("Please enter amount to be withdrawled\n");
         double amount = input.nextDouble();
         if (amount > getBalance(acctType)) {
@@ -106,7 +115,11 @@ class BasicUser implements Commands {
             e.printStackTrace();
         } // end try, catch block
         System.err.println("Withdrawl Failed"); // error message
-        return -1; // error return kek
+        
+    } catch (InputMismatchException e){
+        System.err.println("Invalid Input");
+    }
+    return -1; // error return key
     } // end Withdrawl
 
     @Override
@@ -148,7 +161,9 @@ class BasicUser implements Commands {
             return response;
         } catch (NullPointerException e){
             e.printStackTrace();
-        } // end try/catch
+        } catch (InputMismatchException e){
+            System.err.println("Invalid Input");
+        }// end try/catch
         return 0;
     }// end GetAccounts
 
@@ -158,7 +173,7 @@ class BasicUser implements Commands {
         String accttype = input.nextLine();
 
         try (PreparedStatement pStatement = connection
-                .prepareStatement("insert into applications (id, accttype) values (?,?)")) {
+                .prepareStatement("insert into applications (userfk, accttype) values (?,?)")) {
             pStatement.setInt(1, UserID);
             pStatement.setString(2, accttype);
             pStatement.executeUpdate();
@@ -168,9 +183,33 @@ class BasicUser implements Commands {
         } // end try/catch
     } // end Apply
 
+    public void Apply(int acctNumber){
+        try (PreparedStatement pStatement1 = connection.prepareStatement("select * from accounts where id = ?")){
+            pStatement1.setInt(1, acctNumber);
+            ResultSet resultSet = pStatement1.executeQuery();
+            if(resultSet.next()){
+            
+            PreparedStatement pStatement = connection
+                .prepareStatement("insert into applications (userfk, accttype, accountid) values (?,?,?) ");
+            pStatement.setInt(1, UserID);
+            pStatement.setString(2, resultSet.getString("accttype"));
+            pStatement.setInt(3, acctNumber);
+            pStatement.executeUpdate();
+            System.out.println("Your application has been submitted\n");
+            }
+
+            else{
+                System.err.println("Account does not exist");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } // end try/catch
+    }
+
     @Override
     public void Transfer() {
-        this.Balance();
+       
+       try{
         System.out.println("Transfer from:");
         int from = this.GetAccounts();
 
@@ -188,7 +227,7 @@ class BasicUser implements Commands {
             System.out.println("Cannot complete transfer \n account would be overdrawn\n");
             this.Transfer();
         }
-
+        else{
         try {
             PreparedStatement pStatement = connection.prepareStatement("update accounts set balance = ? where id = ?");
             pStatement.setDouble(1, this.getBalance(to) + amount);
@@ -201,7 +240,10 @@ class BasicUser implements Commands {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        // TODO enter premade command to update values in database
+    }
+    } catch (InputMismatchException e){
+        System.err.println("Invalid Input");
+    }
     } // end Transfer
 
     public double getBalance(int accttype) {
