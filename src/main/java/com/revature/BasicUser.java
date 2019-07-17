@@ -144,7 +144,6 @@ class BasicUser implements Commands {
                             + " where userlogins.id = ? group by accounts.id, userlogins_accounts.acctfk, userlogins_accounts.userfk, userlogins.id");
             pStatement.setInt(1, this.UserID);
             ResultSet resultSet = pStatement.executeQuery();
-            System.out.println("StateQuery");
             return resultSet;
         }catch(SQLException e){
             e.printStackTrace();

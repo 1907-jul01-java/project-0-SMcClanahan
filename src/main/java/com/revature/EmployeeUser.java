@@ -75,15 +75,25 @@ class EmployeeUser extends BasicUser{
                         resultSet2.next();
                         String accttype = resultSet2.getString("accttype");
                         int userfk = resultSet2.getInt("userfk");
-                        //TODO setup for account id from joint accounts
-                        PreparedStatement pStatement2 = connection.prepareStatement("insert into accounts (accttype) values (?)");
+                        int acctID = resultSet2.getInt("accountid");
+                        PreparedStatement pStatement2;
+                        PreparedStatement pStatement3;
+                        if (acctID > 0){
+                        pStatement3 = connection.prepareStatement("insert into userlogins_accounts (userfk, acctfk) select ?, ? from accounts");
+                        pStatement3.setInt(1, userfk);
+                        pStatement3.setInt(2, acctID);
+                        pStatement3.executeUpdate();
+                        }
+                        else{
+                        pStatement2 = connection.prepareStatement("insert into accounts (accttype) values (?)");
                         pStatement2.setString(1, accttype);
                         pStatement2.executeUpdate();
-                        PreparedStatement pStatement3 = connection.prepareStatement("insert into userlogins_accounts (userfk, acctfk) select ?, Max(id) from accounts");
+                        pStatement3 = connection.prepareStatement("insert into userlogins_accounts (userfk, acctfk) select ?, Max(id) from accounts");
                         pStatement3.setInt(1, userfk);
                         pStatement3.executeUpdate();
-
                         pStatement2.close();
+                        }
+                        
                         pStatement3.close();
                         PreparedStatement pStatement4 = connection.prepareStatement("update applications set accountstatus = ? where id = ?");
                         pStatement4.setString(1, "Approved");
@@ -104,6 +114,9 @@ class EmployeeUser extends BasicUser{
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+                else{
+                    System.err.println("Invalid Response");
                 }
             } //end if
             else{

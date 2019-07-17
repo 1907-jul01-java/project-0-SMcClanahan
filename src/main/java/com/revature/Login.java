@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Login {
@@ -36,7 +37,7 @@ public class Login {
         return this.type;
     }
 
-    private int Match() {
+    public int Match() {
         System.out.println("Please enter username\n");
         String response = input.nextLine();
         try (PreparedStatement pstatement = connection
@@ -121,6 +122,8 @@ public class Login {
             e.printStackTrace();
         } catch (NullPointerException e){
             e.printStackTrace();
+        } catch (InputMismatchException e){
+            System.err.println("Invalid Input");
         }
 
         return -1;

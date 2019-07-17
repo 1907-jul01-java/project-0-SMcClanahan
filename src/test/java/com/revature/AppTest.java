@@ -7,6 +7,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.Scanner;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +20,8 @@ public class AppTest {
     ConnectionUtil connection;
     @Before public void TestInit(){
     connection = new ConnectionUtil();
-    //this.user = new BasicUser(1, connection.getConnection());
+    Scanner input = new Scanner(System.in);
+    user = new BasicUser(input, 1, connection.getConnection());
     }
 
     @Test

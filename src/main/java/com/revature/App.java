@@ -16,6 +16,8 @@ public class App {
             if (user == 0){
                 user = login.Create(0);
             }
+            System.out.println("Thank you for creating an account! Please log in:\n");
+            user = login.Match();
             if (login.getPermissions() >= 1){ 
                 EmployeeUser y = new EmployeeUser(input, connection.getConnection());
                 while(true){
@@ -95,6 +97,8 @@ public class App {
                         "Or type \"exit\" \n");
 
                         String in = input.nextLine();
+
+
                         if (in.equalsIgnoreCase("exit")){
                             break;
                         }
@@ -115,7 +119,6 @@ public class App {
                                 }catch (InputMismatchException e){
                                     System.err.println("Invalid Input, a number is required");
                                 }
-                                //TODO Enter joint acct logic
                                 break;
                             }
                             case "4":{
